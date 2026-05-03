@@ -1,3 +1,12 @@
+---
+title: Resume Screener
+emoji: 📄
+colorFrom: blue
+colorTo: indigo
+sdk: docker
+pinned: false
+---
+
 # 📄 Resume Screener
 
 An NLP-based web app that predicts which job role a resume best fits, built using machine learning and deployed on Hugging Face Spaces.
@@ -35,6 +44,15 @@ resume_screener/
 ├── requirements.txt
 └── Dockerfile
 
+
+## 🚀 Run Locally
+```bash
+git clone https://github.com/Vaibhavi-1904/Resume_Screener.git
+cd Resume_Screener
+pip install -r requirements.txt
+streamlit run app.py
+```
+
 ## 🚀 Run Locally
 '''bash
 git clone https://github.com/Vaibhavi-1904/Resume_Screener.git
@@ -42,3 +60,4 @@ cd Resume_Screener
 pip install -r requirements.txt
 streamlit run app.py
 '''
+
