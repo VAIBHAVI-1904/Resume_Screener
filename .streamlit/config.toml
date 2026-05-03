@@ -2,7 +2,7 @@
 maxUploadSize = 10
 enableXsrfProtection = false
 headless = true
-port = 8501
+port = 7860
 
 [browser]
 gatherUsageStats = false
