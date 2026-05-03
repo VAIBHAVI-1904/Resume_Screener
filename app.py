@@ -15,14 +15,14 @@ def load_model():
 
 model, tfidf = load_model()
 
-# ── STEP 3: Clean text function (same as training) ────────────────────
+# ── STEP 3: Clean text function ───────────────────────────────────────
 def clean_text(text):
     text = re.sub(r'http\S+', ' ', text)
     text = re.sub(r'[^a-zA-Z\s]', ' ', text)
     text = re.sub(r'\s+', ' ', text)
     return text.lower().strip()
 
-# ── STEP 4: Function to extract text from PDF ─────────────────────────
+# ── STEP 4: Extract text from PDF ────────────────────────────────────
 def extract_text_from_pdf(uploaded_file):
     doc = fitz.open(stream=uploaded_file.read(), filetype="pdf")
     text = ""
@@ -32,7 +32,6 @@ def extract_text_from_pdf(uploaded_file):
 
 # ── STEP 5: Build the UI ──────────────────────────────────────────────
 st.set_page_config(page_title="Resume Screener", page_icon="📄", layout="centered")
-
 st.title("📄 Resume Screener")
 st.markdown("Upload your resume and find out which job role it matches best.")
 st.divider()
@@ -40,47 +39,54 @@ st.divider()
 # ── STEP 6: File uploader ─────────────────────────────────────────────
 uploaded_file = st.file_uploader("Upload your resume (PDF only)", type=["pdf"])
 
-# ── STEP 7: Prediction logic ──────────────────────────────────────────
 if uploaded_file is not None:
-    try:
-        with st.spinner("Analysing your resume..."):
-            raw_text = extract_text_from_pdf(uploaded_file)
-            if not raw_text.strip():
-                st.error("Could not extract text from this PDF. Please try another file.")
-                st.stop()
-            cleaned = clean_text(raw_text)
-            vectorized = tfidf.transform([cleaned])
-            prediction = model.predict(vectorized)[0]
-            probabilities = model.predict_proba(vectorized)[0]
-            confidence = max(probabilities) * 100
-    except Exception as e:
-        st.error(f"Error: {e}")
-        st.stop()
+    analyse = st.button("Analyse Resume")
+    if analyse:
+        try:
+            with st.spinner("Analysing your resume..."):
 
-# ── STEP 8: Display results ───────────────────────────────────
-        st.success("Analysis Complete!")
-        st.divider()
+                # Extract and clean text
+                raw_text = extract_text_from_pdf(uploaded_file)
 
-        col1, col2 = st.columns(2)
+                if not raw_text.strip():
+                    st.error("Could not extract text from this PDF. Please try another file.")
+                    st.stop()
 
-        with col1:
-            st.metric(label="Predicted Job Role", value=prediction)
+                cleaned = clean_text(raw_text)
 
-        with col2:
-            st.metric(label="Match Score", value=f"{confidence:.1f}%")
+                # Vectorize
+                vectorized = tfidf.transform([cleaned])
 
-        st.divider()
+                # Predict
+                prediction = model.predict(vectorized)[0]
+                probabilities = model.predict_proba(vectorized)[0]
+                confidence = max(probabilities) * 100
 
-        # Top 3 matches
-        st.subheader("Top 3 Matching Roles")
-        classes = model.classes_
-        top3_indices = probabilities.argsort()[::-1][:3]
+            # ── STEP 7: Display results ───────────────────────────────
+            st.success("Analysis Complete!")
+            st.divider()
 
-        for i, idx in enumerate(top3_indices):
-            role = classes[idx]
-            score = probabilities[idx] * 100
-            st.progress(int(score), text=f"{i+1}. {role} — {score:.1f}%")
+            col1, col2 = st.columns(2)
+            with col1:
+                st.metric(label="Predicted Job Role", value=prediction)
+            with col2:
+                st.metric(label="Match Score", value=f"{confidence:.1f}%")
 
-            # Show extracted text (optional, collapsible)
-        with st.expander("See extracted resume text"):
-            st.text(raw_text[:3000])
+            st.divider()
+
+            # Top 3 matches
+            st.subheader("Top 3 Matching Roles")
+            classes = model.classes_
+            top3_indices = probabilities.argsort()[::-1][:3]
+
+            for i, idx in enumerate(top3_indices):
+                role = classes[idx]
+                score = probabilities[idx] * 100
+                st.progress(int(score), text=f"{i+1}. {role} — {score:.1f}%")
+
+            with st.expander("See extracted resume text"):
+                st.text(raw_text[:3000])
+
+        except Exception as e:
+            st.error(f"Error: {e}")
+            st.stop()
