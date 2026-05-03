@@ -66,6 +66,7 @@ if uploaded_file is not None:
             st.success("Analysis Complete!")
             st.divider()
 
+            col1, col2 = st.columns(2)
             with col1:
                 st.markdown("**Predicted Job Role**")
                 st.markdown(f"### {prediction}")
