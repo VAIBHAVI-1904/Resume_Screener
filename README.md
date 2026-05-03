@@ -44,15 +44,6 @@ resume_screener/
 ├── requirements.txt
 └── Dockerfile
 
-
-## 🚀 Run Locally
-```bash
-git clone https://github.com/Vaibhavi-1904/Resume_Screener.git
-cd Resume_Screener
-pip install -r requirements.txt
-streamlit run app.py
-```
-
 ## 🚀 Run Locally
 '''bash
 git clone https://github.com/Vaibhavi-1904/Resume_Screener.git
