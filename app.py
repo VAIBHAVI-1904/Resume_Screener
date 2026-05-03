@@ -66,11 +66,12 @@ if uploaded_file is not None:
             st.success("Analysis Complete!")
             st.divider()
 
-            col1, col2 = st.columns(2)
             with col1:
-                st.metric(label="Predicted Job Role", value=prediction)
+                st.markdown("**Predicted Job Role**")
+                st.markdown(f"### {prediction}")
             with col2:
-                st.metric(label="Match Score", value=f"{confidence:.1f}%")
+                st.markdown("**Match Score**")
+                st.markdown(f"### {confidence:.1f}%")
 
             st.divider()
 
