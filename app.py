@@ -42,19 +42,20 @@ uploaded_file = st.file_uploader("Upload your resume (PDF only)", type=["pdf"])
 
 # ── STEP 7: Prediction logic ──────────────────────────────────────────
 if uploaded_file is not None:
-    with st.spinner("Analysing your resume..."):
-
-        # Extract and clean text
-        raw_text = extract_text_from_pdf(uploaded_file)
-        cleaned = clean_text(raw_text)
-
-        # Vectorize
-        vectorized = tfidf.transform([cleaned])
-
-        # Predict
-        prediction = model.predict(vectorized)[0]
-        probabilities = model.predict_proba(vectorized)[0]
-        confidence = max(probabilities) * 100
+    try:
+        with st.spinner("Analysing your resume..."):
+            raw_text = extract_text_from_pdf(uploaded_file)
+            if not raw_text.strip():
+                st.error("Could not extract text from this PDF. Please try another file.")
+                st.stop()
+            cleaned = clean_text(raw_text)
+            vectorized = tfidf.transform([cleaned])
+            prediction = model.predict(vectorized)[0]
+            probabilities = model.predict_proba(vectorized)[0]
+            confidence = max(probabilities) * 100
+    except Exception as e:
+        st.error(f"Error: {e}")
+        st.stop()
 
 # ── STEP 8: Display results ───────────────────────────────────
         st.success("Analysis Complete!")
