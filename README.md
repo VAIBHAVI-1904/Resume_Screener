@@ -1,20 +1,44 @@
----
-title: Resume Screener
-emoji: 🚀
-colorFrom: red
-colorTo: red
-sdk: docker
-app_port: 8501
-tags:
-- streamlit
-pinned: false
-short_description: Streamlit template space
-license: mit
----
+# 📄 Resume Screener
 
-# Welcome to Streamlit!
+An NLP-based web app that predicts which job role a resume best fits, built using machine learning and deployed on Hugging Face Spaces.
 
-Edit `/src/streamlit_app.py` to customize this app to your heart's desire. :heart:
+## 🔗 Live Demo
+[Try it here](https://huggingface.co/spaces/Vaibhavi-1904/Resume_Screener)
 
-If you have any questions, checkout our [documentation](https://docs.streamlit.io) and [community
-forums](https://discuss.streamlit.io).
+## 🧠 How it works
+1. User uploads a resume as a PDF
+2. Text is extracted and cleaned
+3. TF-IDF converts the text into numerical features
+4. A Linear SVC model predicts the most suitable job role
+5. Top 3 matching roles are displayed with scores
+
+## 📊 Model Performance
+- **Algorithm:** TF-IDF + Linear SVC (with CalibratedClassifierCV)
+- **Dataset:** 2,484 resumes across 24 job categories
+- **Accuracy:** 67.61%
+
+## 🛠️ Tech Stack
+| Tool | Purpose |
+|---|---|
+| scikit-learn | TF-IDF vectorization + Linear SVC model |
+| Streamlit | Web UI |
+| PyMuPDF | PDF text extraction |
+| Hugging Face Spaces | Free cloud deployment |
+
+## 📁 Project Structure
+resume_screener/
+├── app.py           # Streamlit web app
+├── train.py         # Model training script
+├── model/
+│   ├── model.pkl    # Trained model
+│   └── tfidf.pkl    # TF-IDF vectorizer
+├── requirements.txt
+└── Dockerfile
+
+## 🚀 Run Locally
+'''bash
+git clone https://github.com/Vaibhavi-1904/Resume_Screener.git
+cd Resume_Screener
+pip install -r requirements.txt
+streamlit run app.py
+'''
