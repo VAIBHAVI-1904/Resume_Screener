@@ -35,21 +35,32 @@ An NLP-based web app that predicts which job role a resume best fits, built usin
 | Hugging Face Spaces | Free cloud deployment |
 
 ## 📁 Project Structure
+
 resume_screener/
+
 ├── app.py           # Streamlit web app
+
 ├── train.py         # Model training script
+
 ├── model/
+
 │   ├── model.pkl    # Trained model
+
 │   └── tfidf.pkl    # TF-IDF vectorizer
+
 ├── requirements.txt
+
 └── Dockerfile
 
 ## 🚀 Run Locally
 '''bash'''
 
 git clone https://github.com/Vaibhavi-1904/Resume_Screener.git
+
 cd Resume_Screener
+
 pip install -r requirements.txt
+
 streamlit run app.py
 
 
